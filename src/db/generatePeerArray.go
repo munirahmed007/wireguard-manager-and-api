@@ -11,6 +11,10 @@ import (
 	"gorm.io/gorm"
 )
 
+func AllPeers() []wgtypes.PeerConfig {
+	return generatePeerArray()
+}
+
 func generatePeerArray() []wgtypes.PeerConfig {
 	var keyStruct []Key               //key struct
 	var keyArray []wgtypes.PeerConfig //peers (clients)

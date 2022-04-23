@@ -3,6 +3,7 @@ package network
 import (
 	"fmt"
 	"log"
+	"os/exec"
 
 	"github.com/spf13/viper"
 	"github.com/vishvananda/netlink"
@@ -17,6 +18,32 @@ func SetupWG() {
 		log.Fatal("Error - Failed to get link to wireguard interface")
 	}
 	ipCheck(wg0)
+}
+
+func addPostWGUp() {
+	addRoutes()
+}
+
+func execute(app string, args...string) {
+	exec.Command(app, args...)
+}
+
+func addRoutes() {
+	peers := db.AllPeers()
+	app := "ip"
+	arg0 := "route"
+	arg1 := "add"
+	arg2 := "192.168.1.1"
+	arg3 := "dev"
+	arg4 := "wg0"
+
+	for i, s := range peers {
+		if len(s.AllowedIPs) > 0 {
+			fmt.Println(i, s.AllowedIPs[0].IP.String())
+			arg2 = s.AllowedIPs[0].IP.String() + "/32"
+			exec.Command(app, arg0, arg1, arg2, arg3, arg4)
+		}
+	}
 }
 
 func addIP(instance netlink.Link, ipAddr *netlink.Addr) {
@@ -101,4 +128,5 @@ func ipCheck(wg0 netlink.Link) {
 	if !ipv4Check {
 		addIP(wg0, ipv4Addr) //add IPv4 to system
 	}
+	addPostWGUp()
 }
