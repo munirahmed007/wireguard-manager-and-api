@@ -21,6 +21,7 @@ func SetupWG() {
 }
 
 func addPostWGUp() {
+	log.Printf("adding routes")
 	addRoutes()
 }
 
@@ -41,6 +42,7 @@ func addRoutes() {
 		if len(s.AllowedIPs) > 0 {
 			fmt.Println(i, s.AllowedIPs[0].IP.String())
 			arg2 = s.AllowedIPs[0].IP.String() + "/32"
+			log.Printf("adding routes ", arg2)
 			exec.Command(app, arg0, arg1, arg2, arg3, arg4)
 		}
 	}
