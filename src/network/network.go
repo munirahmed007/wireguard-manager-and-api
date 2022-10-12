@@ -51,8 +51,8 @@ func addRoutes() {
 func addIP(instance netlink.Link, ipAddr *netlink.Addr) {
 	ipAddErr := netlink.AddrAdd(instance, ipAddr)
 	if ipAddErr != nil {
-		fmt.Println("Error - Failed to add IP address", ipAddErr)
-		log.Println("Error - Failed to add IP address", ipAddErr)
+		fmt.Println("Warning - Failed to add IP address", ipAddErr)
+		log.Println("Warning - Failed to add IP address", ipAddErr)
 	} else {
 		log.Println("Info - Added IP address to interface")
 	}
